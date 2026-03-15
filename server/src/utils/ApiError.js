@@ -1,4 +1,3 @@
-// Fix Bug 5 — statusCode capital C
 class ApiError extends Error {
   constructor(statusCode, message = 'Something went wrong') {
     super(message);

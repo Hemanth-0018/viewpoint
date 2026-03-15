@@ -48,8 +48,12 @@ export const register = async (req, res) => {
       .json(new ApiResponse(201, createdUser, "User registered successfully"));
 
   } catch (err) {
-    return res.status(500).json(new ApiError(500, err.message));
-  }
+  console.error("REGISTER ERROR >>>", err.message, err.stack);
+  return res.status(500).json({ 
+    message: err.message,
+    stack: err.stack 
+  });
+}
 };
 
 export const login = async (req, res) => {
@@ -70,7 +74,7 @@ export const login = async (req, res) => {
         .json(new ApiError(404, "User not found"));
     }
 
-    // ── Bug 3 fixed: isPasswordVaild → isPasswordCorrect
+  
     const isPasswordValid = await user.isPasswordCorrect(password);
 
     if (!isPasswordValid) {
@@ -82,7 +86,6 @@ export const login = async (req, res) => {
     const { accessToken, refreshToken } = await generateTokens(user._id);
     const loggedInUser = await User.findById(user._id);
 
-    // ── Bug 4 fixed: .cokkie → .cookie
     return res
       .status(200)
       .cookie("accessToken", accessToken, cookieOptions)
@@ -92,8 +95,12 @@ export const login = async (req, res) => {
       );
 
   } catch (err) {
-    return res.status(500).json(new ApiError(500, err.message));
-  }
+  console.error("LOGIN ERROR >>>", err.message, err.stack);
+  return res.status(500).json({ 
+    message: err.message,
+    stack: err.stack 
+  });
+}
 };
 
 // ── Bug 5 fixed: (res, req) → (req, res)
